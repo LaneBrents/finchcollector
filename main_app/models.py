@@ -2,15 +2,29 @@ from django.db import models
 from django.urls import reverse
 
 # Create your models here.
+
+class Toy(models.Model):
+  name = models.CharField(max_length=50)
+  color = models.CharField(max_length=20)
+
+  def __str__(self):
+    return self.name
+
+  def get_absolute_url(self):
+    return reverse('toys_detail', kwargs={'pk': self.id})
+
+
 class Finch(models.Model):
     name = models.CharField(max_length=100)
     breed = models.CharField(max_length=100)
     description = models.TextField(max_length=250)
     age = models.IntegerField()
+    # Add the M:M relationship
+    toys = models.ManyToManyField(Toy)
 
-def get_absolute_url(self):
+    def get_absolute_url(self):
     
-    return reverse('detail', kwargs={'finch_id': self.id})
+        return reverse('detail', kwargs={'finch_id': self.id})
 
 # Field Choices
 MEALS = ( # This is an example of a constant
@@ -35,4 +49,4 @@ def __str__(self):
     return f"{self.get_meal_display()} on {self.date}"
 
 class Meta:
-		ordering = ['-date']
+	ordering = ['-date']
